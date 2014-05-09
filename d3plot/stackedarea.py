@@ -5,7 +5,7 @@ from IPython.utils.traitlets import Unicode, CInt, List, Bool, Any
 from IPython.display import display, Javascript
 
 def publish_stackedarea_js():
-    with open('./stackedarea.js', 'r') as f:
+    with open('./static/stackedarea.js', 'r') as f:
         display(Javascript(data=f.read()))
 
 

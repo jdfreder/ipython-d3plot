@@ -1,11 +1,15 @@
+import os
 from operator import add
 
 from IPython.html import widgets # Widget definitions
 from IPython.utils.traitlets import Unicode, CInt, List, Bool, Any
 from IPython.display import display, Javascript
 
+def get_static_path():
+    return os.path.join(os.path.split(__file__)[0], 'static')
+
 def publish_stackedarea_js():
-    with open('./static/stackedarea.js', 'r') as f:
+    with open(os.path.join(get_static_path(), 'stackedarea.js'), 'r') as f:
         display(Javascript(data=f.read()))
 
 

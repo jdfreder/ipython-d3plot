@@ -1,5 +1,6 @@
 import os
 from operator import add
+from functools import reduce
 
 from IPython.html import widgets # Widget definitions
 from IPython.utils.traitlets import Unicode, CInt, List, Bool, Any

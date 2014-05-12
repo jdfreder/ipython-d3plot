@@ -10,6 +10,8 @@ def get_static_path():
     return os.path.join(os.path.split(__file__)[0], 'static')
 
 def publish_stackedarea_js():
+    with open(os.path.join(get_static_path(), 'd3.min.js'), 'r') as f:
+        display(Javascript(data=f.read()))
     with open(os.path.join(get_static_path(), 'stackedarea.js'), 'r') as f:
         display(Javascript(data=f.read()))
 

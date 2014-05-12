@@ -28,84 +28,89 @@ require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "widgets/js/mana
         },
 
         rerender: function () {
-            $("#" + this.guid + " svg").remove();
-            this.rendered = undefined;
+            if (this.rendered) {
+                $("#" + this.guid + " svg").remove();
+                this.rendered = undefined;
+            }
             this.handle_draw();
         },
 
         handle_scale: function (){
-            var scale = this.model.get('_scale');
-            this.scale_x
-                .domain(scale[0]);
-            this.scale_y
-                .domain(scale[1]);
+            if (this.rendered) {
+                var scale = this.model.get('_scale');
+                this.scale_x
+                    .domain(scale[0]);
+                this.scale_y
+                    .domain(scale[1]);
 
-            this.svg.select('.x.axis')
-                .transition().duration(750)
-                .call(this.x_axis);
+                this.svg.select('.x.axis')
+                    .transition().duration(750)
+                    .call(this.x_axis);
 
-            this.svg.select('.y.axis')
-                .transition().duration(750)
-                .call(this.y_axis);
+                this.svg.select('.y.axis')
+                    .transition().duration(750)
+                    .call(this.y_axis);
+            }
         },
 
         handle_values: function (){
+            if (this.rendered) {
+                var areas = this.svg.selectAll('path.area')
+                    .data(this.stack_values(this.model.get('_values')));
 
-            var areas = this.svg.selectAll('path.area')
-                .data(this.stack_values(this.model.get('_values')));
+                areas
+                    .transition().duration(750)
+                    .attr('d', this._format_area)
+                    .attr("fill", this._format_color);
 
-            areas
-                .transition().duration(750)
-                .attr('d', this._format_area)
-                .attr("fill", this._format_color);
+                areas
+                    .enter()
+                    .append('path')
+                    .attr("class", "area")
+                    .transition().duration(750)
+                    .attr('d', this._format_area)
+                    .attr("fill", this._format_color);
 
-            areas
-                .enter()
-                .append('path')
-                .attr("class", "area")
-                .transition().duration(750)
-                .attr('d', this._format_area)
-                .attr("fill", this._format_color);
+                areas
+                    .exit()
+                    .transition()
+                    .duration(750)
+                    .attr("y", 60)
+                    .style("fill-opacity", 1e-6)
+                    .remove();
 
-            areas
-                .exit()
-                .transition()
-                .duration(750)
-                .attr("y", 60)
-                .style("fill-opacity", 1e-6)
-                .remove();
+                var lines = this.svg.selectAll('path.line')
+                    .data(this.model.get('_line_values'));
 
-            var lines = this.svg.selectAll('path.line')
-                .data(this.model.get('_line_values'));
+                lines
+                    .transition().duration(750)
+                    .attr('d', this._format_line)
+                    .attr("stroke-dasharray", this._format_line_dashes)
+                    .attr("stroke", this._format_line_color)
+                    .attr("stroke-width", this._format_line_width)
+                    .attr("fill", "none");
 
-            lines
-                .transition().duration(750)
-                .attr('d', this._format_line)
-                .attr("stroke-dasharray", this._format_line_dashes)
-                .attr("stroke", this._format_line_color)
-                .attr("stroke-width", this._format_line_width)
-                .attr("fill", "none");
+                lines
+                    .enter()
+                    .append('path')
+                    .attr("class", "line")
+                    .transition().duration(750)
+                    .attr('d', this._format_line)
+                    .attr("stroke-dasharray", this._format_line_dashes)
+                    .attr("stroke", this._format_line_color)
+                    .attr("stroke-width", this._format_line_width)
+                    .attr("fill", "none");
+                    // .on('mouseover', this.tip.show)
+                    // .on('mouseout', this.tip.hide);
 
-            lines
-                .enter()
-                .append('path')
-                .attr("class", "line")
-                .transition().duration(750)
-                .attr('d', this._format_line)
-                .attr("stroke-dasharray", this._format_line_dashes)
-                .attr("stroke", this._format_line_color)
-                .attr("stroke-width", this._format_line_width)
-                .attr("fill", "none");
-                // .on('mouseover', this.tip.show)
-                // .on('mouseout', this.tip.hide);
-
-            lines
-                .exit()
-                .transition()
-                .duration(750)
-                .attr("y", 60)
-                .style("fill-opacity", 1e-6)
-                .remove();
+                lines
+                    .exit()
+                    .transition()
+                    .duration(750)
+                    .attr("y", 60)
+                    .style("fill-opacity", 1e-6)
+                    .remove();
+            }
         },
 
         stack_values: function(data) {

@@ -1,4 +1,15 @@
-require(["//cdnjs.cloudflare.com/ajax/libs/d3/3.4.1/d3.min.js", "widgets/js/manager"], function(d3, WidgetManager){
+require.config({
+    paths: {
+        d3: "%(d3_url)",
+    },
+    shim: {
+        d3: {
+            exports: 'd3'
+        }
+    }
+});
+
+require(["widgets/js/manager", "d3"], function(WidgetManager, d3){
 
     // Define the D3StackedAreaView
     var D3StackedAreaView = IPython.DOMWidgetView.extend({

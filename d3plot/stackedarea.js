@@ -1,4 +1,4 @@
-require(["widgets/js/manager"], function(WidgetManager){
+require(["widgets/js/manager", "d3.min"], function(WidgetManager, d3){
 
     // Define the D3StackedAreaView
     var D3StackedAreaView = IPython.DOMWidgetView.extend({
